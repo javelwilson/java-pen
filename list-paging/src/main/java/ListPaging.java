@@ -1,38 +1,60 @@
 import org.springframework.beans.support.PagedListHolder;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class ListPaging {
     public static void main(String[] args) {
-
         List list = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        int page;
+        int pageSize;
 
-        PagedListHolder pagedListHolder = new PagedListHolder(list);
+        Scanner scanner = new Scanner(System.in);
+        String  control = "y";
 
-        System.out.print("Complete List: ");
-        System.out.println(list.stream().collect(Collectors.toList()));
+        while (!control.equalsIgnoreCase("n")) {
 
-        int pageSize = 2;
-        int page = 4;
+            // -- console interaction
+            System.out.print("\ncompleteList: ");
+            System.out.println(list.stream().collect(Collectors.toList()));
 
-        pagedListHolder.setPageSize(pageSize);
-        pagedListHolder.setPage(page);
+            System.out.println("Enter the page number");
+            page = scanner.nextInt();
 
-        List pagedList = pagedListHolder.getPageList();
+            System.out.println("Enter the page size");
+            pageSize = scanner.nextInt();
+            // --
 
-        System.out.print("\nPaged List " + "(" + page + "): ");
-        System.out.println(pagedList.stream().collect(Collectors.toList()));
+            // -- paging solution
+            PagedListHolder pagedListHolder = new PagedListHolder(list);
 
-        System.out.println("\nPage Count: " + pagedListHolder.getPageCount());
+            pagedListHolder.setPageSize(pageSize);
+            pagedListHolder.setPage(page);
 
-        System.out.println("\nIs First Page: " + pagedListHolder.isFirstPage());
+            List pagedList = pagedListHolder.getPageList();
+            // --
 
-        System.out.println("\nIs Last Page: " + pagedListHolder.isLastPage());
+            // -- display
+            System.out.print("\npage" + "(" + page + "): ");
+            System.out.println(pagedList.stream().collect(Collectors.toList()));
 
-        System.out.println("\nCurrent Page: " + pagedListHolder.getPage());
+            System.out.println("currentPage: " + pagedListHolder.getPage());
 
-        System.out.println("\nCurrent Page Size: " + pagedList.size());
+            System.out.println("isFirstPage: " + pagedListHolder.isFirstPage());
 
+            System.out.println("isLastPage: " + pagedListHolder.isLastPage());
+
+            System.out.println("currentPageSize: " + pagedList.size());
+
+            System.out.println("pageCount: " + pagedListHolder.getPageCount());
+
+            System.out.println("\nContinue? (any key/n)");
+            control = scanner.next();
+            if (control.equalsIgnoreCase("n")) {
+                scanner.close();
+            }
+            // --
+        }
     }
 }
